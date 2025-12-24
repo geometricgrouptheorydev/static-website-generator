@@ -8,6 +8,9 @@ class TextType(Enum):
 	CODE = "code"
 	LINK = "a"
 	IMAGE = "img"
+	STRIKETHROUGH = "s"
+	SUPERSCRIPT = "sup"
+	SUBSCRIPT = "sub"
 
 	@property
 	def label(self):

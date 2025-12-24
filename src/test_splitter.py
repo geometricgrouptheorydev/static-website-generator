@@ -58,15 +58,38 @@ class TestInlineMarkdown(unittest.TestCase):
             new_nodes,
         )
 
-    def test_delim_bold_and_italic(self):
-        node = TextNode("**bold** and _italic_", TextType.TEXT)
-        new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
-        new_nodes = split_nodes_delimiter(new_nodes, "_", TextType.ITALIC)
+    def test_delim_strikethrough(self):
+        node = TextNode("This is text with a ~~strikethrough~~ word", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "~~", TextType.STRIKETHROUGH)
         self.assertListEqual(
             [
-                TextNode("bold", TextType.BOLD),
-                TextNode(" and ", TextType.TEXT),
-                TextNode("italic", TextType.ITALIC),
+                TextNode("This is text with a ", TextType.TEXT),
+                TextNode("strikethrough", TextType.STRIKETHROUGH),
+                TextNode(" word", TextType.TEXT),
+            ],
+            new_nodes,
+        )
+
+    def test_delim_superscript(self):
+        node = TextNode("E = MC^2^ + AI", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "^", TextType.SUPERSCRIPT)
+        self.assertListEqual(
+            [
+                TextNode("E = MC", TextType.TEXT),
+                TextNode("2", TextType.SUPERSCRIPT),
+                TextNode(" + AI", TextType.TEXT),
+            ],
+            new_nodes,
+        )
+
+    def test_delim_subscript(self):
+        node = TextNode("H~2~O", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "~", TextType.SUBSCRIPT)
+        self.assertListEqual(
+            [
+                TextNode("H", TextType.TEXT),
+                TextNode("2", TextType.SUBSCRIPT),
+                TextNode("O", TextType.TEXT),
             ],
             new_nodes,
         )

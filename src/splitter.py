@@ -2,7 +2,7 @@ from textnode import TextNode, TextType
 import re
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
-    #input: list of textnodes, a delimiter, and the texttype of each delimiter
+    #input: list of textnodes, a markdown delimiter, and the texttype of each delimiter
     new_nodes = []
     for node in old_nodes:
         node_text_type = node.text_type
@@ -55,11 +55,15 @@ def split_nodes_link(old_nodes):
                     new_nodes.append(TextNode(link_data[(i-1)//2][0], TextType.LINK, link_data[(i-1)//2][1]))
     return new_nodes
 
-def text_to_textnodes(text):
-    nodes = [TextNode(text, TextType.TEXT)]
-    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
+def text_to_textnodes(text): #Note: does not support nested delimiters yet!
+    nodes = [TextNode(text, TextType.TEXT)] #The whole text is set under a textnode but we split those below
     nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
+    nodes = split_nodes_delimiter(nodes, "*", TextType.ITALIC) #We want to support both italic syntaxes
     nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
+    nodes = split_nodes_delimiter(nodes, "~~", TextType.STRIKETHROUGH)
+    nodes = split_nodes_delimiter(nodes, "^", TextType.SUPERSCRIPT)
+    nodes = split_nodes_delimiter(nodes, "~", TextType.SUBSCRIPT)
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_link(nodes)
     return nodes

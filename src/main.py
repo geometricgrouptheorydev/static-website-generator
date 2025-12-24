@@ -65,7 +65,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, bas
 
 def main():
     basepath = sys.argv[1] if len(sys.argv) >= 2  else "/"
-    copy(os.path.abspath("static"), os.path.abspath("docs"))
+    copy(os.path.abspath("static"), os.path.abspath("docs")) #copies your static files such as images to the docs directory, ready to be used
     generate_pages_recursive(os.path.abspath("content"), os.path.abspath("template.html"), os.path.abspath("docs"), basepath)
 
 if __name__ == "__main__":
